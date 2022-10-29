@@ -105,12 +105,12 @@ class _PoemChildState extends State<PoemChild> {
           builder: (context, constraints) {
             return Stack(
               children: <Widget>[
-                // Positioned(
-                //   top: 0,
-                //   left: 0,
-                //   child: Text(
-                //       "$message $scrollerHeight ${constraints.maxHeight.round()}"),
-                // ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Text(
+                      "$message $scrollerHeight ${constraints.maxHeight.round()}"),
+                ),
                 PoemText(
                     key: globalKey,
                     controller: _controller,
