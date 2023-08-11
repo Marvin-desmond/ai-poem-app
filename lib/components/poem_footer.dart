@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ai_poem_app/common.dart';
 
 class PoemFooter extends StatelessWidget {
   const PoemFooter({super.key});
@@ -7,10 +7,10 @@ class PoemFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.1,
-      margin: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+      margin: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
       padding: const EdgeInsets.all(5.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(children: const <Widget>[
             Flexible(
@@ -20,29 +20,29 @@ class PoemFooter extends StatelessWidget {
                   iconColor: Colors.red,
                   message: "7541 Likes"),
             ),
-            Flexible(
-              flex: 1,
-              child: IconMessage(
-                  icon: Icons.chat_rounded,
-                  iconColor: Colors.blue,
-                  message: "302 comment"),
-            ),
+            // Flexible(
+            //   flex: 1,
+            //   child: IconMessage(
+            //       icon: Icons.chat_rounded,
+            //       iconColor: Colors.blue,
+            //       message: "302 comment"),
+            // ),
           ]),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 5.0),
-                  child: const Text("marvinuiux"),
-                ),
-                Text(
-                  "A good one!",
-                  style: TextStyle(color: Colors.grey[400]),
-                )
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+          //   child: Row(
+          //     children: <Widget>[
+          //       Container(
+          //         margin: const EdgeInsets.only(right: 5.0),
+          //         child: const Text("marvinuiux"),
+          //       ),
+          //       Text(
+          //         "A good one!",
+          //         style: TextStyle(color: Colors.grey[400]),
+          //       )
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

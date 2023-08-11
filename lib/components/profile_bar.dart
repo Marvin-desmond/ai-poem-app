@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ai_poem_app/common.dart';
 
 class ProfileBar extends StatelessWidget {
   const ProfileBar({

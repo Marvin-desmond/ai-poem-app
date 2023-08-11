@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ai_poem_app/wondrous/app_icons.dart';
-import 'package:ai_poem_app/wondrous/buttons.dart';
+import 'package:ai_poem_app/helpers/app_icons.dart';
+import 'package:ai_poem_app/helpers/buttons.dart';
 
 class CircleBtn extends StatelessWidget {
   const CircleBtn({

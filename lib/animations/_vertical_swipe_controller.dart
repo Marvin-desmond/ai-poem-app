@@ -1,4 +1,4 @@
-part of '../first_screen.dart';
+part of '../screens/first_screen.dart';
 
 class _VerticalSwipeController {
   _VerticalSwipeController(this.ticker, this.onSwipeComplete);
