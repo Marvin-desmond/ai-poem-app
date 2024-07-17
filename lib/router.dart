@@ -25,7 +25,7 @@ final appRouter = GoRouter(
         (_) => Container(color: Colors.grey)), // This will be hidden
     AppRoute(ScreenPaths.home, (_) => const HomeScreen()),
     AppRoute('/details/:id', (s) {
-      int id = int.tryParse(s.params['id'] ?? '') ?? 0;
+      int id = int.tryParse(s.pathParameters['id'] ?? '') ?? 0;
       return SecondScreen(id: id);
     }, useFade: true),
     AppRoute(ScreenPaths.newPoem, (s) => const NewPoem()),
