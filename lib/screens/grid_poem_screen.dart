@@ -2,8 +2,7 @@ import 'package:ai_poem_app/common.dart';
 import 'package:ai_poem_app/helpers/app_backdrop.dart';
 
 class GridPoem extends StatefulWidget {
-  const GridPoem({Key? key, required this.index, required this.data})
-      : super(key: key);
+  const GridPoem({super.key, required this.index, required this.data});
   final ImageModel data;
   final int index;
 
@@ -74,7 +73,7 @@ class _GridPoemState extends State<GridPoem> {
                     _buildIconGrid(context, widget.index)
                         .animate()
                         .fade(duration: const Duration(milliseconds: 300))
-                        .scale(begin: .8, curve: Curves.easeOut),
+                        .scale(begin: const Offset(0.8, 0), curve: Curves.easeOut),
                     const Spacer(flex: 1),
                     const Gap(48),
                   ],
