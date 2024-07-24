@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ai_poem_app/screens/first_screen.dart';
-import 'package:ai_poem_app/screens/infinite_scroll_test.dart';
 import 'package:ai_poem_app/screens/second_screen.dart';
 import 'package:ai_poem_app/screens/new_poem_screen.dart';
 
