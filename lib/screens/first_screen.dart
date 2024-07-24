@@ -212,17 +212,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
         ),
-
-        Positioned(
-          left: MediaQuery.of(context).size.width * 0.3, 
-          top: 50.0,
-          child: IconButton(onPressed: () => context.push(ScreenPaths.infiniteScroll), 
-          icon: const Icon(
-            Icons.call_made_rounded,
-            color: Colors.green,
-          )  
-          ),
-        ),
         TopRight(
             child: AnimatedOpacity(
           duration: const Duration(milliseconds: 500),
