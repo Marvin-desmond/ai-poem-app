@@ -1,8 +1,15 @@
 import 'package:ai_poem_app/common.dart';
-import 'package:rive/rive.dart';
 
-class NewPoem extends StatelessWidget {
+class NewPoem extends StatefulWidget {
   const NewPoem({super.key});
+
+  @override
+  State<NewPoem> createState() => _NewPoemState();
+}
+
+class _NewPoemState extends State<NewPoem> {
+  final ImagePicker picker = ImagePicker();
+  File? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +20,11 @@ class NewPoem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
+              height: MediaQuery.of(context).size.height * 0.07,
               width: MediaQuery.of(context).size.width,
               child: Row(
-                children: [
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
                   const Text(
                     "New poem",
                     style: TextStyle(
@@ -26,28 +34,51 @@ class NewPoem extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                   ),
-                  const Gap(15),
-                  Flexible(
-                    child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                              topLeft: Radius.circular(5.0),
-                              bottomLeft: Radius.circular(10.0)),
-                        ),
-                        child: const RiveAnimation.asset(
-                          "assets/rive/vehicles.riv",
-                          fit: BoxFit.cover,
-                        )),
-                  )
+                  IconButton(
+                      icon: const Icon(Icons.fit_screen_outlined),
+                      onPressed: () async {
+                            try {
+                              final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                              if (image == null) return;
+                              setState(() {
+                                _image = File(image.path);
+                              });
+                            } catch (e) {
+                              print("ERROR == ${e}");
+                              // setState(() {
+                              //   _pickImageError = e;
+                              // });
+                            }
+                      })
                 ],
               ),
             ),
+            /* Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                    color: Colors.red[200]),
+                child: _image != null
+                    ? Image.file(
+                          _image!,
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.fitHeight,
+                        )
+                    : Container(
+                        decoration: BoxDecoration(
+                            color: Colors.red[200]),
+                        width: 200,
+                        height: 200,
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+              ),*/
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                margin: const EdgeInsets.only(top: 0.0, bottom: 10.0),
                 height: MediaQuery.of(context).size.height * 0.62,
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -71,9 +102,22 @@ class NewPoem extends StatelessWidget {
                 ),
               ),
             ),
-            const Text("Hello new poem!"),
-            IconButton(
-                onPressed: () => context.pop(), icon: const Icon(Icons.close)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                onPressed: () => context.pop(), icon: const Icon(Icons.close)
+                ),
+                SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: IconButton(
+                  onPressed: () {}, 
+                  icon: Image.asset("assets/images/icon-quill.png"),
+                  )
+                )
+              ],
+            ),
             SizedBox(
               height: MediaQuery.of(context).viewInsets.bottom,
             )
