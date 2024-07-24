@@ -6,7 +6,6 @@ import 'package:ai_poem_app/screens/first_screen.dart';
 import 'package:ai_poem_app/screens/infinite_scroll_test.dart';
 import 'package:ai_poem_app/screens/second_screen.dart';
 import 'package:ai_poem_app/screens/new_poem_screen.dart';
-import 'package:ai_poem_app/screens/grid_poem_screen.dart';
 
 /// Shared paths / urls used across the app
 class ScreenPaths {
