@@ -4,7 +4,7 @@ import 'package:ai_poem_app/components/profile_bar.dart';
 import 'package:ai_poem_app/components/poem_parent.dart';
 
 class SecondScreen extends StatelessWidget {
-  const SecondScreen({Key? key, required this.id}) : super(key: key);
+  const SecondScreen({super.key, required this.id});
   final int id;
 
   @override
@@ -16,7 +16,7 @@ class SecondScreen extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key, required this.id}) : super(key: key);
+  const MainPage({super.key, required this.id});
   final int id;
 
   @override
@@ -27,7 +27,6 @@ class _MainPageState extends State<MainPage> {
   late final ScrollController _scroller = ScrollController()
     ..addListener(_handleScrollChanged);
   final _scrollPos = ValueNotifier(0.0);
-  final _sectionIndex = ValueNotifier(0);
   final _scrollToPopThreshold = 50;
 
   bool _isPointerDown = false;
@@ -133,13 +132,12 @@ class _MainPageState extends State<MainPage> {
 
 class ScrollMainContent extends StatelessWidget {
   const ScrollMainContent({
-    Key? key,
-  }) : super(key: key);
+    super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(children: const <Widget>[
+    return const SingleChildScrollView(
+      child: Column(children: <Widget>[
         ProfileBar(),
         PoemParent(),
       ]),
@@ -148,9 +146,7 @@ class ScrollMainContent extends StatelessWidget {
 }
 
 class ToggleLike extends StatefulWidget {
-  const ToggleLike({
-    Key? key,
-  }) : super(key: key);
+  const ToggleLike({super.key});
 
   @override
   State<ToggleLike> createState() => _ToggleLikeState();
