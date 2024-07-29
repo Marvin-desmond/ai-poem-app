@@ -1,5 +1,5 @@
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 export 'dart:io';
+export 'dart:math';
 
 export 'package:flutter/rendering.dart';
 export 'package:flutter/material.dart';
@@ -17,3 +17,5 @@ export 'package:ai_poem_app/image_logic/image_model.dart';
 export 'package:ai_poem_app/image_logic/image_model_class.dart';
 export 'package:ai_poem_app/main.dart';
 export 'package:ai_poem_app/router.dart';
+export 'package:ai_poem_app/logic/Poems/api.dart';
+export 'package:ai_poem_app/logic/Poems/Poem.dart';
