@@ -1,3 +1,4 @@
+import 'package:ai_poem_app/archive/using_path_provider.dart';
 import 'package:ai_poem_app/common.dart';
 
 import 'package:ai_poem_app/helpers/circle_buttons.dart';
@@ -6,10 +7,9 @@ import 'package:ai_poem_app/helpers/gradient_container.dart';
 import 'package:ai_poem_app/helpers/buttons.dart';
 
 import 'package:ai_poem_app/animations/app_page_indicator.dart';
+import 'package:ai_poem_app/logic/Poems/Poem.dart';
+import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
 import 'package:ai_poem_app/screens/grid_poem_screen.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'dart:math';
 
 part '../animations/_vertical_swipe_controller.dart';
 part '../animations/_animated_arrow_button.dart';
@@ -33,22 +33,37 @@ class _HomeScreenState extends State<HomeScreen>
         10000, // allow 'infinite' scrolling by starting at a very high page
   );
 
-  late int _modelIndex = 0;
+  late int _poemIndex = 0;
   double? _swipeOverride;
   bool _fadeInOnNextBuild = false;
   bool initialLoad = false;
   List<ImageModel> models = [];
+  List<Poem> poems = [];
   final defaultImageModel = ImageModel(254, "Kenya Here We Are",
       "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
   ImageModel currentModel = ImageModel(254, "Kenya Here We Are",
       "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
-  int currentId = 1;
+  Poem currentPoem = Poem(
+    "123456789",
+    """
+    If high school me could see me now
+    I bet high school me would be so proud, she'd find out
+    The cool kids, they ain't everything
+    The world is so much bigger then her town
+    If high school me could see me now
+    """,
+    ["imagine poem"],
+    [DateTime.now()],
+    ["123456789"],
+    null
+  );
+  String? currentId;
   late String currentName;
 
   @override
   void initState() {
     super.initState();
-    currentName = currentModel.name;
+    currentName = currentPoem.imaginePrompt[0];
   }
 
   void _handleOpenMenuPressed() async {
@@ -56,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     ImageModel? pickedImage =
         await appLogic.showFullscreenDialogRoute<ImageModel>(
       context,
-      GridPoem(index: _modelIndex, data: currentModel),
+      GridPoem(index: _poemIndex, data: currentModel),
     );
     setState(() => _isMenuOpen = false);
     if (pickedImage != null) {
@@ -68,12 +83,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _handlePageViewChanged(v) {
     setState(() {
-      _modelIndex = v % models.length;
+      _poemIndex = v % poems.length;
     });
   }
 
   void _setPageIndex(int index) {
-    if (index == _modelIndex) return;
+    if (index == _poemIndex) return;
     final pos =
         ((controller.page ?? 0) / models.length).floor() * models.length;
     controller.jumpToPage(pos + index);
@@ -81,53 +96,57 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _showDetailsPage() async {
     _swipeOverride = _swipeController.swipeAmt.value;
-    if (models.isNotEmpty) {
-      context.push(ScreenPaths.imageDetails(currentId));
+    if (poems.isNotEmpty && currentId != null) {
+      context.push(ScreenPaths.imageDetails(currentId!));
     }
     await Future.delayed(100.ms);
     _swipeOverride = null;
     _fadeInOnNextBuild = true;
   }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<ImageModelClass>(
-        builder: (context, imageModelClass, child) {
-      if (models.isNotEmpty && !initialLoad) {
-        currentName = models[0].name;
+    return Consumer<PoemNotifier>(
+        builder: (context, poemNotifier, child) {
+      if (poems.isNotEmpty && !initialLoad) {
+        currentId = poems[0].id;
+        currentPoem = poems[0];
+        String currentPrompt = poems[0].imaginePrompt[0];
+        currentName = currentPrompt.substring(17, currentPrompt.length - 3);
         initialLoad = true;
       }
-      models = imageModelClass.images;
-      return Stack(children: [
+      poems = poemNotifier.poems;
+      return poems.isEmpty ? 
+      const CircularProgressIndicator() : Stack(children: [
         PageView.builder(
           controller: controller,
           onPageChanged: (value) {
             setState(() {
-              int index = (value - 10000) % models.length;
-              currentId = index + 1;
-              currentName = models[index % models.length].name;
-              Provider.of<ImageModelClass>(context, listen: false)
-                  .checkPrevAndNextImageModels(current: index);
-              _handlePageViewChanged(index % models.length);
+              int index =  (value - 10000) % poems.length;
+              currentId = poems[index % poems.length].id;
+              String currentPrompt = poems[index % poems.length].imaginePrompt[0];
+              // CHANGE IT AFTER TWEAK ON THE BACKEND
+              currentName = currentPrompt.substring(17, currentPrompt.length - 3);
+              Provider.of<PoemNotifier>(context, listen: false)
+                  .checkPrevAndNextPoem(current: index);
+              _handlePageViewChanged(index % poems.length);
             });
           },
           itemBuilder: (_, index) {
-            currentModel = models.isEmpty
-                ? defaultImageModel
-                : models[index % models.length];
-            return _swipeController.wrapGestureDetector(Center(
-              child: CachedNetworkImage(
-                imageUrl: currentModel.image,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
-                  ),
+            currentPoem = poems.isEmpty ?  currentPoem : poems[index % poems.length];
+                final decoration = BoxDecoration(
+                image: currentPoem.buffer == null ? 
+                DecorationImage(
+                  image: NetworkImage(currentModel.image) 
+                )
+                : DecorationImage(
+                  image: MemoryImage(
+                    currentPoem.buffer!,
+                    ),
+                  fit: BoxFit.fitHeight
                 ),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
+              );
+            return _swipeController.wrapGestureDetector(Center(
+              child: Container(decoration: decoration,),
             ));
           },
         ),
@@ -142,23 +161,22 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     const SizedBox(width: double.infinity),
                     const Spacer(),
-                    Consumer<ImageModelClass>(
-                        builder: (context, imageModelClass, child) {
-                      return Text(
-                        currentName,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Andika',
-                            decoration: TextDecoration.none),
-                      );
-                    }),
-                    Consumer<ImageModelClass>(
-                        builder: (context, imageModelClass, child) {
+                    Consumer<PoemNotifier>(
+                        builder: (context, poemNotifier, child) {
+                          return Text(
+                            currentName,
+                            style: const TextStyle(
+                              color: Colors.white
+                            )
+                            );
+                        },
+                      ),
+                    Consumer<PoemNotifier>(
+                        builder: (context, poemNotifier, child) {
                       return AppPageIndicator(
-                        count: imageModelClass.images.isEmpty
+                        count: poemNotifier.poems.isEmpty
                             ? 1
-                            : imageModelClass.images.length,
+                            : poemNotifier.poems.length,
                         controller: controller,
                         color: Colors.white,
                         onDotPressed: _handlePageIndicatorDotPressed,
@@ -171,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen>
                         alignment: Alignment.center,
 
                         /// Lose state of child objects when index changes, this will re-run all the animated switcher and the arrow anim
-                        key: ValueKey(_modelIndex),
+                        key: ValueKey(_poemIndex),
                         child: Stack(
                           children: [
                             /// Expanding rounded rect that grows in height as user swipes up
