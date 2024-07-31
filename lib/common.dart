@@ -1,5 +1,6 @@
 export 'dart:io';
 export 'dart:math';
+export 'dart:convert';
 
 export 'package:flutter/rendering.dart';
 export 'package:flutter/material.dart';
