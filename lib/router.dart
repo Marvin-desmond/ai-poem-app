@@ -10,7 +10,7 @@ import 'package:ai_poem_app/screens/new_poem_screen.dart';
 class ScreenPaths {
   static String splash = '/';
   static String home = '/home';
-  static String imageDetails(int id) => '/details/$id';
+  static String imageDetails(String id) => '/details/$id';
   static String newPoem = "/newPoem";
   static String infiniteScroll = "/infiniteScroll";
 }
@@ -23,7 +23,7 @@ final appRouter = GoRouter(
         (_) => Container(color: Colors.grey)), // This will be hidden
     AppRoute(ScreenPaths.home, (_) => const HomeScreen()),
     AppRoute('/details/:id', (s) {
-      int id = int.tryParse(s.pathParameters['id'] ?? '') ?? 0;
+      String id = s.pathParameters['id'] ?? '';
       return SecondScreen(id: id);
     }, useFade: true),
     AppRoute(ScreenPaths.newPoem, (s) => const NewPoem()),
