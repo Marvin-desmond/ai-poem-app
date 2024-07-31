@@ -7,15 +7,15 @@ import 'package:path_provider/path_provider.dart';
 /// You need to rebuild the application as the plugin can't be found
 ///
 ///
-class Poem extends StatelessWidget {
-  const Poem({Key? key}) : super(key: key);
+class PoemWidget extends StatelessWidget {
+  const PoemWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.5,
-      child: Column(
-        children: const <Widget>[
+      child: const Column(
+        children: <Widget>[
           // Expanded(
           //   child: GetContent(storage: CounterStorage()),
           // ),
@@ -29,7 +29,7 @@ class Poem extends StatelessWidget {
 }
 
 class PoemFromFile extends StatefulWidget {
-  const PoemFromFile({Key? key}) : super(key: key);
+  const PoemFromFile({super.key});
   @override
   State<PoemFromFile> createState() => _PoemFromFileState();
 }
@@ -59,7 +59,7 @@ class _PoemFromFileState extends State<PoemFromFile> {
 }
 
 class GetContent extends StatefulWidget {
-  const GetContent({Key? key, required this.storage}) : super(key: key);
+  const GetContent({super.key, required this.storage});
 
   final CounterStorage storage;
 
