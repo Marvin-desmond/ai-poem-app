@@ -2,10 +2,11 @@ import 'package:ai_poem_app/common.dart';
 
 import 'package:ai_poem_app/components/profile_bar.dart';
 import 'package:ai_poem_app/components/poem_parent.dart';
+import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key, required this.id});
-  final int id;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class SecondScreen extends StatelessWidget {
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.id});
-  final int id;
+  final String id;
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -32,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   bool _isPointerDown = false;
   bool _checkPointerIsDown(d) => _isPointerDown = d.dragDetails != null;
 
-  late ImageModel currentModel;
+  late Poem currentPoem;
 
   void _handleDetailsScrolled(double scrollPos) =>
       _detailsHasScrolled.value = scrollPos > 0;
@@ -41,9 +42,9 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    List<ImageModel> models =
-        Provider.of<ImageModelClass>(context, listen: false).images;
-    currentModel = models.firstWhere((e) => e.id == widget.id);
+    List<Poem> poems =
+        Provider.of<PoemNotifier>(context, listen: false).poems;
+    currentPoem = poems.firstWhere((e) => e.id == widget.id);
   }
 
   @override
@@ -105,15 +106,20 @@ class _MainPageState extends State<MainPage> {
                             Widget? child) {
                           return Opacity(opacity: value, child: child);
                         },
-                        child: Image.network(
-                          currentModel.image,
-                          fit: BoxFit.cover,
+                        child: 
+                        Container(
+                          decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: MemoryImage(currentPoem.buffer!),
+                              fit: BoxFit.cover
+                ) 
+                        ),
                         ),
                       )),
                     ],
                   ),
                 ),
-                const SliverToBoxAdapter(child: ScrollMainContent())
+                SliverToBoxAdapter(child: ScrollMainContent(poem: currentPoem.poem))
               ],
             ),
           ),
@@ -131,15 +137,15 @@ class _MainPageState extends State<MainPage> {
 }
 
 class ScrollMainContent extends StatelessWidget {
-  const ScrollMainContent({
-    super.key});
+  const ScrollMainContent({super.key, required this.poem});
+  final String poem;
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(children: <Widget>[
-        ProfileBar(),
-        PoemParent(),
+        const ProfileBar(),
+        PoemParent(poem: poem),
       ]),
     );
   }
