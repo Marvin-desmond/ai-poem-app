@@ -18,4 +18,37 @@ class Api {
       throw Exception('Failed to load poems');
     }
   }
+
+  Future<ApiResponse> getPic() async {
+    final response =
+        await http.get(Uri.parse(poems));
+
+
+    if (response.statusCode == 200) {
+      return ApiResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to load poems');
+    }
+  }
+
+  Future<CreateData> createPoem(String poem) async {
+    final response =
+        await http.post(
+          Uri.parse("$poems/create"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'poem': poem,
+          }),
+          );
+    CreateResponse res = CreateResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    if (res.status == 200) {
+      return res.data!;
+    } else {
+      throw Exception(res.message);
+    }
+  }
 }
