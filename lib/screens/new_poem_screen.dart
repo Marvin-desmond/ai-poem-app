@@ -10,6 +10,14 @@ class NewPoem extends StatefulWidget {
 class _NewPoemState extends State<NewPoem> {
   final ImagePicker picker = ImagePicker();
   File? _image;
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,6 @@ class _NewPoemState extends State<NewPoem> {
                                 _image = File(image.path);
                               });
                             } catch (e) {
-                              print("ERROR == ${e}");
                               // setState(() {
                               //   _pickImageError = e;
                               // });
@@ -93,10 +100,11 @@ class _NewPoemState extends State<NewPoem> {
                       ),
                     ],
                     color: Colors.white),
-                child: const TextField(
-                  style: TextStyle(fontFamily: "FuzzyBubbles"),
+                child: TextField(
+                  controller: _controller,
+                  style: const TextStyle(fontFamily: "FuzzyBubbles"),
                   maxLines: null, //or null
-                  decoration: InputDecoration.collapsed(
+                  decoration: const InputDecoration.collapsed(
                       hintText: "Write your imaginations here...",
                       hintStyle: TextStyle(fontFamily: 'FuzzyBubbles')),
                 ),
@@ -106,13 +114,29 @@ class _NewPoemState extends State<NewPoem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                onPressed: () => context.pop(), icon: const Icon(Icons.close)
+                onPressed: (){ 
+                  if (MediaQuery.of(context).viewInsets.bottom > 0.0) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  } else {
+                  context.pop();
+                  }
+                }, icon: const Icon(Icons.close)
                 ),
                 SizedBox(
                   height: 50,
                   width: 50,
                   child: IconButton(
-                  onPressed: () {}, 
+                  onPressed: () async {
+                    String editedPoem = _controller.text;
+                    try {
+                    CreateData response = await Api().createPoem(editedPoem);
+                    if (response.acknowledged) {
+
+                    }
+                    } catch(e) {
+                      print("ERROR IN CREATE POEM");
+                    }
+                  }, 
                   icon: Image.asset("assets/images/icon-quill.png"),
                   )
                 )
