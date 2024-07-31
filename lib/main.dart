@@ -1,4 +1,5 @@
 import 'package:ai_poem_app/common.dart';
+import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
 import 'package:ai_poem_app/logic/app_logic.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -9,8 +10,11 @@ void main() async {
 
   registerSingletons();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ImageModelClass(),
+      MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ImageModelClass()),
+        ListenableProvider(create: (context) => PoemNotifier()),
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'AI Poem App',
@@ -28,7 +32,9 @@ void registerSingletons() {
   GetIt.I.registerLazySingleton<AppLogic>(() => AppLogic());
   // ImageModels
   GetIt.I.registerLazySingleton<ImageModelClass>(() => ImageModelClass());
+  GetIt.I.registerLazySingleton<PoemNotifier>(() => PoemNotifier());
 }
 
 AppLogic get appLogic => GetIt.I.get<AppLogic>();
 ImageModelClass get imageModelClass => GetIt.I.get<ImageModelClass>();
+PoemNotifier get poemNotifier => GetIt.I.get<PoemNotifier>();
