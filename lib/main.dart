@@ -1,5 +1,4 @@
 import 'package:ai_poem_app/common.dart';
-import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
 import 'package:ai_poem_app/logic/app_logic.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
