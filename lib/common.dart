@@ -20,3 +20,4 @@ export 'package:ai_poem_app/main.dart';
 export 'package:ai_poem_app/router.dart';
 export 'package:ai_poem_app/logic/Poems/api.dart';
 export 'package:ai_poem_app/logic/Poems/Poem.dart';
+export 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
