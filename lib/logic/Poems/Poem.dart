@@ -38,7 +38,7 @@ class Poem {
   final String poem;
   final List<String> imaginePrompt;
   final List<DateTime> lastModified;
-  final List<String> fileId;
+  final List<String>? fileId;
   Uint8List? buffer;
 
     Poem(
@@ -52,7 +52,7 @@ class Poem {
         lastModified = (json['last_modified'] as List)
             .map((dateString) => DateTime.parse(dateString))
             .toList(),
-        fileId = List<String>.from(json['file_id']);
+        fileId = json['data'] != null ? List<String>.from(json['file_id']) : null;
 }
 
 // TO-DO
@@ -103,6 +103,23 @@ class MetaResponse {
         message = json['message'];
 }
 
+class SinglePoemResponse {
+  final int status;
+  final Poem data;
+  final String message;
+
+  const SinglePoemResponse({
+    required this.status,
+    required this.data,
+    required this.message,
+  });
+
+  SinglePoemResponse.fromJson(Map<String, dynamic> json)
+      : status = json['status'],
+        data = Poem.fromJson(json['data']),
+        message = json['message'];
+}
+
 class ApiResponse {
   final int status;
   final List<Poem> data;
@@ -141,4 +158,59 @@ class CreateResponse {
         message = json['message'];
 }
 
+class UpdateData {
+  final bool acknowledged;
+  final int modifiedCount;
+  final String? upsertedId;
+  final int upsertedCount;
+  final int matchedCount;
+
+  UpdateData.fromJson(Map<String, dynamic> json)
+    : acknowledged = json['acknowledged'],
+      modifiedCount = json['modifiedCount'],
+      upsertedId = json['upsertedId'],
+      upsertedCount = json['upsertedCount'],
+      matchedCount = json['matchedCount'];
+}
+
+class UpdateResponse {
+  final int status;
+  final UpdateData? data;
+  final String message;
+
+  UpdateResponse.fromJson(Map<String, dynamic> json)
+      : status = json['status'],
+        data = json['data'] != null ? UpdateData.fromJson(json['data']) : null,
+        message = json['message'];
+}
+
+class CreatePicData {
+  final bool streamDone;
+  final bool metaDone;
+  final String fileId;
+  final String buffer;
+  const CreatePicData({
+    required this.streamDone,
+    required this.metaDone,
+    required this.fileId,
+    required this.buffer
+  });
+
+  CreatePicData.fromJson(Map<String, dynamic> json)
+      : streamDone = json['stream_done'],
+        metaDone = json['meta_done'],
+        fileId = json['file_id'],
+        buffer = json['buffer'];
+}
+
+class CreatePicDataResponse {
+  final int status;
+  final CreatePicData data;
+  final String message;
+
+  CreatePicDataResponse.fromJson(Map<String, dynamic> json)
+      : status = json['status'],
+        data = CreatePicData.fromJson(json['data']),
+        message = json['message'];
+}
 
