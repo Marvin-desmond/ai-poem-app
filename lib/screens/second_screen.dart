@@ -2,7 +2,7 @@ import 'package:ai_poem_app/common.dart';
 
 import 'package:ai_poem_app/components/profile_bar.dart';
 import 'package:ai_poem_app/components/poem_parent.dart';
-import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
+
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({super.key, required this.id});
@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
     ..addListener(_handleScrollChanged);
   final _scrollPos = ValueNotifier(0.0);
   final _scrollToPopThreshold = 50;
+  String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
 
   bool _isPointerDown = false;
   bool _checkPointerIsDown(d) => _isPointerDown = d.dragDetails != null;
@@ -109,10 +110,15 @@ class _MainPageState extends State<MainPage> {
                         child: 
                         Container(
                           decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: MemoryImage(currentPoem.buffer!),
-                              fit: BoxFit.cover
-                ) 
+                          image: currentPoem.buffer == null ? 
+                          DecorationImage(
+                            image: NetworkImage(defaultImage),
+                            fit: BoxFit.cover
+                          ) : 
+                          DecorationImage(
+                            image: MemoryImage(currentPoem.buffer!),
+                            fit: BoxFit.cover
+                          ) 
                         ),
                         ),
                       )),
