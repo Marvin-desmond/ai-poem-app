@@ -1,4 +1,3 @@
-import 'package:ai_poem_app/archive/using_path_provider.dart';
 import 'package:ai_poem_app/common.dart';
 
 import 'package:ai_poem_app/helpers/circle_buttons.dart';
@@ -7,8 +6,6 @@ import 'package:ai_poem_app/helpers/gradient_container.dart';
 import 'package:ai_poem_app/helpers/buttons.dart';
 
 import 'package:ai_poem_app/animations/app_page_indicator.dart';
-import 'package:ai_poem_app/logic/Poems/Poem.dart';
-import 'package:ai_poem_app/logic/Poems/PoemNotifier.dart';
 import 'package:ai_poem_app/screens/grid_poem_screen.dart';
 
 part '../animations/_vertical_swipe_controller.dart';
@@ -43,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen>
       "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
   ImageModel currentModel = ImageModel(254, "Kenya Here We Are",
       "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
+  String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
   Poem currentPoem = Poem(
     "123456789",
     """
@@ -110,8 +108,7 @@ class _HomeScreenState extends State<HomeScreen>
       if (poems.isNotEmpty && !initialLoad) {
         currentId = poems[0].id;
         currentPoem = poems[0];
-        String currentPrompt = poems[0].imaginePrompt[0];
-        currentName = currentPrompt.substring(17, currentPrompt.length - 3);
+        currentName = poems[0].imaginePrompt[0];
         initialLoad = true;
       }
       poems = poemNotifier.poems;
@@ -123,20 +120,19 @@ class _HomeScreenState extends State<HomeScreen>
             setState(() {
               int index =  (value - 10000) % poems.length;
               currentId = poems[index % poems.length].id;
-              String currentPrompt = poems[index % poems.length].imaginePrompt[0];
-              // CHANGE IT AFTER TWEAK ON THE BACKEND
-              currentName = currentPrompt.substring(17, currentPrompt.length - 3);
+              currentName = poems[index % poems.length].imaginePrompt[0];
               Provider.of<PoemNotifier>(context, listen: false)
                   .checkPrevAndNextPoem(current: index);
               _handlePageViewChanged(index % poems.length);
             });
           },
           itemBuilder: (_, index) {
-            currentPoem = poems.isEmpty ?  currentPoem : poems[index % poems.length];
+            currentPoem = poems.isEmpty ? currentPoem : poems[index % poems.length];
                 final decoration = BoxDecoration(
                 image: currentPoem.buffer == null ? 
                 DecorationImage(
-                  image: NetworkImage(currentModel.image) 
+                  image: NetworkImage(defaultImage),
+                  fit: BoxFit.cover
                 )
                 : DecorationImage(
                   image: MemoryImage(
