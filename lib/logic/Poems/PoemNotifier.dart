@@ -7,13 +7,14 @@ import 'package:flutter/services.dart';
 class PoemNotifier extends ChangeNotifier {
   Poem? currentPoem;
   Poem? tempPoem;
+  Poem? createdUpdatedPoem;
+
   bool ifError = false;
   List<Poem> poems = [];
   String basePoem = "http://10.0.2.2:8080/api/poems";
   String basePics = "http://10.0.2.2:8080/api/pics";
 
   PoemNotifier() {
-
     getPoems().then((res) async {
       if (res.status == 200) {
         List<Poem> fetchedPoems = res.data;
@@ -76,6 +77,15 @@ class PoemNotifier extends ChangeNotifier {
         await rootBundle.loadString('assets/files/image_models.json');
     Iterable userMap = await jsonDecode(response);
     return userMap;
+  }
+
+  void setCreatedUpdatedPoem(Poem poem) {
+    createdUpdatedPoem = poem; 
+    notifyListeners();
+  }
+
+  void clearCreatedUpdatedPoem() {
+    createdUpdatedPoem = null;
   }
 
   void populate(List<Poem> fetchedPoems) {
