@@ -167,20 +167,14 @@ class _HomeScreenState extends State<HomeScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(width: double.infinity),
-                    const Spacer(),
-                    Consumer<PoemNotifier>(
-                        builder: (context, poemNotifier, child) {
-                          return Text(
-                            currentName,
-                            style: const TextStyle(
-                              color: Colors.white
-                            )
-                            );
-                        },
-                      ),
-                    Consumer<PoemNotifier>(
-                        builder: (context, poemNotifier, child) {
-                      return AppPageIndicator(
+                    const Spacer(),                
+                    Text(
+                      currentName,
+                      style: const TextStyle(
+                        color: Colors.white
+                      )
+                    ),
+                    AppPageIndicator(
                         count: poemNotifier.poems.isEmpty
                             ? 1
                             : poemNotifier.poems.length,
@@ -188,8 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
                         color: Colors.white,
                         onDotPressed: _handlePageIndicatorDotPressed,
                         dotSize: 8,
-                      );
-                    }),
+                    ),
                     MergeSemantics(
                       child: Container(
                         width: double.infinity,
