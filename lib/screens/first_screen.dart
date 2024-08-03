@@ -20,15 +20,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  late int initialPageSize;
   bool _isMenuOpen = false;
   late final _VerticalSwipeController _swipeController =
       _VerticalSwipeController(this, () => _showDetailsPage());
 
-  final controller = PageController(
-    viewportFraction: 1,
-    initialPage:
-        10000, // allow 'infinite' scrolling by starting at a very high page
-  );
+  late PageController controller;
 
   late int _poemIndex = 0;
   double? _swipeOverride;
@@ -62,6 +59,12 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     currentName = currentPoem.imaginePrompt[0];
+  }
+
+    @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   void _handleOpenMenuPressed() async {
@@ -105,6 +108,16 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Consumer<PoemNotifier>(
         builder: (context, poemNotifier, child) {
+          /* 
+          an interesting bug fix due to dynamic changes in data but pagecontroller
+          page size modulus is non-zero, leading to offset of zero index in data
+          shown
+          */
+          initialPageSize = poemNotifier.poems.length * 6000;
+              controller = PageController(
+              viewportFraction: 1,
+              initialPage: initialPageSize // allow 'infinite' scrolling by starting at a very high page
+        );
       if (poems.isNotEmpty && !initialLoad) {
         currentId = poems[0].id;
         currentPoem = poems[0];
@@ -118,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen>
           controller: controller,
           onPageChanged: (value) {
             setState(() {
-              int index =  (value - 10000) % poems.length;
+              int index =  (value - initialPageSize) % poems.length;
               currentId = poems[index % poems.length].id;
               currentName = poems[index % poems.length].imaginePrompt[0];
               Provider.of<PoemNotifier>(context, listen: false)
