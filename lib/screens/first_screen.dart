@@ -33,8 +33,6 @@ class _HomeScreenState extends State<HomeScreen>
   bool initialLoad = false;
   List<ImageModel> models = [];
   List<Poem> poems = [];
-  final defaultImageModel = ImageModel(254, "Kenya Here We Are",
-      "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
   ImageModel currentModel = ImageModel(254, "Kenya Here We Are",
       "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80");
   String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
