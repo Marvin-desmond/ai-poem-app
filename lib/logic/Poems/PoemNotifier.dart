@@ -25,8 +25,11 @@ class PoemNotifier extends ChangeNotifier {
             var specificMeta = picsMeta.where((i) => i.poemId == poem.id).toList();
             if (specificMeta.isNotEmpty) {
               var thirdRes = await getPic(specificMeta[0].fileId);
+              print(specificMeta[0].fileId);
               if (thirdRes.status == 200) {
-                poem.buffer = base64Decode(thirdRes.data.buffer); 
+                if (thirdRes.data.buffer != null) {
+                poem.buffer = base64Decode(thirdRes.data.buffer!); 
+                }
               }
             }
           }
@@ -50,22 +53,22 @@ class PoemNotifier extends ChangeNotifier {
     }
   }
   
-  Future<MetaResponse> getMetadata() async {
+  Future<MetadataResponse> getMetadata() async {
     final response =
         await http.get(Uri.parse("$basePics/getmeta"));
     if (response.statusCode == 200) {
-      return MetaResponse.fromJson(
+      return MetadataResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to load meta data');
     }
   }
 
-  Future<PicResponse> getPic(String fileId) async {
+  Future<PicDataResponse> getPic(String fileId) async {
     final response =
         await http.get(Uri.parse("$basePics/get/$fileId"));
     if (response.statusCode == 200) {
-      return PicResponse.fromJson(
+      return PicDataResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to load pic');
@@ -82,6 +85,12 @@ class PoemNotifier extends ChangeNotifier {
   void setCreatedUpdatedPoem(Poem poem) {
     createdUpdatedPoem = poem; 
     notifyListeners();
+  }
+
+  void setNewPic(Uint8List buffer) {
+    if (createdUpdatedPoem != null) {
+      createdUpdatedPoem!.buffer = buffer; 
+    }
   }
 
   void clearCreatedUpdatedPoem() {
