@@ -19,16 +19,16 @@ class Api {
     }
   }
 
-  Future<ApiResponse> getPic() async {
+  Future<PicData> getPic(String fileId) async {
     final response =
-        await http.get(Uri.parse(basePoemUrl));
+        await http.get(Uri.parse("$basePicUrl/get/$fileId"));
 
-
-    if (response.statusCode == 200) {
-      return ApiResponse.fromJson(
+    PicDataResponse res = PicDataResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
+    if (res.status == 200) {
+      return res.data;
     } else {
-      throw Exception('Failed to load poems');
+      throw Exception(res.message);
     }
   }
 
@@ -52,7 +52,7 @@ class Api {
     }
   }
 
-    Future<CreateData> createPic(String poemId, String prompt) async {
+    Future<PicData> createPic(String poemId, String prompt) async {
     final response =
         await http.post(
           Uri.parse("$basePicUrl/create"),
@@ -64,10 +64,10 @@ class Api {
             'prompt': prompt
           }),
           );
-    CreateResponse res = CreateResponse.fromJson(
+    PicDataResponse res = PicDataResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     if (res.status == 200) {
-      return res.data!;
+      return res.data;
     } else {
       throw Exception(res.message);
     }
