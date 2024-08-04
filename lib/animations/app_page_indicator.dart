@@ -54,14 +54,15 @@ class _AppPageIndicatorState extends State<AppPageIndicator> {
               controller: widget.controller,
               count: widget.count,
               onDotClicked: widget.onDotPressed,
-              effect: ExpandingDotsEffect(
+              effect: ScrollingDotsEffect(
                   dotWidth: widget.dotSize ?? 6,
                   dotHeight: widget.dotSize ?? 6,
                   paintStyle: PaintingStyle.fill,
                   strokeWidth: (widget.dotSize ?? 6) / 2,
                   dotColor: Colors.white,
                   activeDotColor: Colors.white,
-                  expansionFactor: 2),
+                  maxVisibleDots: 5
+                  ),
             ),
           ),
         ),
