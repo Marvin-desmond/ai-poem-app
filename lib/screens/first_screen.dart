@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ai_poem_app/common.dart';
 
 import 'package:ai_poem_app/helpers/circle_buttons.dart';
@@ -10,6 +12,7 @@ import 'package:ai_poem_app/screens/grid_poem_screen.dart';
 
 part '../animations/_vertical_swipe_controller.dart';
 part '../animations/_animated_arrow_button.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,12 +54,12 @@ class _HomeScreenState extends State<HomeScreen>
     null
   );
   String? currentId;
-  late String currentName;
+  late String currentImaginePrompt;
 
   @override
   void initState() {
     super.initState();
-    currentName = currentPoem.imaginePrompt[0];
+    currentImaginePrompt = currentPoem.imaginePrompt[0];
   }
 
     @override
@@ -119,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen>
       if (poems.isNotEmpty && !initialLoad) {
         currentId = poems[0].id;
         currentPoem = poems[0];
-        currentName = poems[0].imaginePrompt[0];
+        currentImaginePrompt = poems[0].imaginePrompt[0];
         initialLoad = true;
       }
       poems = poemNotifier.poems;
@@ -131,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen>
             setState(() {
               int index =  (value - initialPageSize) % poems.length;
               currentId = poems[index % poems.length].id;
-              currentName = poems[index % poems.length].imaginePrompt[0];
+              currentImaginePrompt = poems[index % poems.length].imaginePrompt[0];
               Provider.of<PoemNotifier>(context, listen: false)
                   .checkPrevAndNextPoem(current: index);
               _handlePageViewChanged(index % poems.length);
@@ -139,21 +142,32 @@ class _HomeScreenState extends State<HomeScreen>
           },
           itemBuilder: (_, index) {
             currentPoem = poems.isEmpty ? currentPoem : poems[index % poems.length];
-                final decoration = BoxDecoration(
-                image: currentPoem.buffer == null ? 
-                DecorationImage(
-                  image: NetworkImage(defaultImage),
-                  fit: BoxFit.cover
-                )
-                : DecorationImage(
-                  image: MemoryImage(
-                    currentPoem.buffer!,
-                    ),
-                  fit: BoxFit.fitHeight
-                ),
-              );
+            final defaultImageDecoration = DecorationImage(
+              image: NetworkImage(defaultImage),
+              fit: BoxFit.cover
+            );
+            final foreDecoration = BoxDecoration(
+              image: currentPoem.buffer == null ? 
+              defaultImageDecoration : DecorationImage(
+              image: MemoryImage(currentPoem.buffer!),
+              fit: BoxFit.contain
+              ),
+            );
+            final backDecoration = BoxDecoration(
+              image: currentPoem.buffer == null ? 
+              defaultImageDecoration : DecorationImage(
+              image: MemoryImage(currentPoem.buffer!),
+              fit: BoxFit.cover
+              ),
+            );
             return _swipeController.wrapGestureDetector(Center(
-              child: Container(decoration: decoration,),
+              child: Container(
+                decoration: backDecoration,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(decoration: foreDecoration,),
+                ),
+              ),
             ));
           },
         ),
@@ -169,9 +183,11 @@ class _HomeScreenState extends State<HomeScreen>
                     const SizedBox(width: double.infinity),
                     const Spacer(),                
                     Text(
-                      currentName,
+                      '${currentImaginePrompt.substring(0, 100).replaceAll(r"\", "")}...',
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.white
+                        color: Colors.white,
+                        fontSize: 16.0
                       )
                     ),
                     AppPageIndicator(
@@ -212,7 +228,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
         ),
-
         /// Menu Btn
         TopLeft(
           child: AnimatedOpacity(
