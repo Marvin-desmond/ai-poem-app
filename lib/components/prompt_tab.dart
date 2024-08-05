@@ -8,12 +8,15 @@ class PromptTab extends StatefulWidget {
 }
 
 class _PromptTabState extends State<PromptTab> {
-  String testPrompt = "Imaginative prompt...";
+  Uint8List? buffer;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PoemNotifier>(
       builder: (BuildContext context, PoemNotifier value, Widget? child) {
+        if (value.createdUpdatedPoem != null && value.createdUpdatedPoem?.buffer != null) {
+          buffer = value.createdUpdatedPoem?.buffer;
+        }
         return Column(
           children: [
             Stack(
