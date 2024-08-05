@@ -1,8 +1,9 @@
 import 'package:ai_poem_app/common.dart';
 
 class NewPoemTab extends StatefulWidget {
-  const NewPoemTab({super.key, required this.bottomContextHeight});
+  const NewPoemTab({super.key, required this.bottomContextHeight, required this.textEditController});
   final double bottomContextHeight;
+  final TextEditingController textEditController;
 
   @override
   State<NewPoemTab> createState() => _NewPoemTabState();
@@ -11,7 +12,6 @@ class NewPoemTab extends StatefulWidget {
 class _NewPoemTabState extends State<NewPoemTab> {
   final ImagePicker picker = ImagePicker();
   File? _image;
-  final _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,9 @@ class _NewPoemTabState extends State<NewPoemTab> {
                     if (widget.bottomContextHeight > 0.0) {
                       FocusManager.instance.primaryFocus?.unfocus();
                     } else {
+                    if (Provider.of<PoemNotifier>(context, listen: false).createdUpdatedPoem != null) {
+                      Provider.of<PoemNotifier>(context, listen: false).addCreatedUpdatedPoem();
+                    }
                     context.pop();
                     }
                   }, icon: const Icon(Icons.close)
@@ -49,7 +52,7 @@ class _NewPoemTabState extends State<NewPoemTab> {
                     }),
                     IconButton(
                     onPressed: () async {
-                      String editedPoem = _controller.text;
+                      String editedPoem = widget.textEditController.text;
                       dynamic response; 
                       Poem? returnedPoem;
                       try {
@@ -63,11 +66,8 @@ class _NewPoemTabState extends State<NewPoemTab> {
                       }
                       if (response.acknowledged) {
                           setState(() {
-                           Provider.of<PoemNotifier>(context, listen: false).setCreatedUpdatedPoem(returnedPoem!);
                            FocusScope.of(context).unfocus();
-                          //  if (widget.bottomContextHeight > 0.0) {
-                          //     FocusManager.instance.primaryFocus?.unfocus();
-                          //   }
+                           Provider.of<PoemNotifier>(context, listen: false).setCreatedUpdatedPoem(returnedPoem!);
                            DefaultTabController.of(context).animateTo(1);
                           });
                       }
@@ -99,7 +99,7 @@ class _NewPoemTabState extends State<NewPoemTab> {
                       ],
                       color: Colors.white),
                   child: TextField(
-                    controller: _controller,
+                    controller: widget.textEditController,
                     style: const TextStyle(fontFamily: "FuzzyBubbles"),
                     maxLines: null, //or null
                     decoration: const InputDecoration.collapsed(
