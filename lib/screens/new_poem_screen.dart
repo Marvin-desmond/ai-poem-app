@@ -10,11 +10,15 @@ class NewPoem extends StatefulWidget {
 }
 
 class _NewPoemState extends State<NewPoem> {
+  final _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     Provider.of<PoemNotifier>(context, listen: false).clearCreatedUpdatedPoem();
   }
+
+  String? editedPoemTextFromChild;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,8 @@ class _NewPoemState extends State<NewPoem> {
           body: TabBarView(
           children: [
           NewPoemTab(
-            bottomContextHeight: MediaQuery.of(context).viewInsets.bottom
+            bottomContextHeight: MediaQuery.of(context).viewInsets.bottom,
+            textEditController: _controller,
           ),
           const Center(
             child: PromptTab()
