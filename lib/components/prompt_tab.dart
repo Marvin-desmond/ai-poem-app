@@ -33,7 +33,7 @@ class _PromptTabState extends State<PromptTab> {
                       color: Colors.blue[100]
                       ),
                     child: Text(
-                      value.createdUpdatedPoem !=null ? value.createdUpdatedPoem!.imaginePrompt[0] : testPrompt.replaceAll(r"\", ""),
+                      value.createdUpdatedPoem !=null ? (value.createdUpdatedPoem!.imaginePrompt[0]).replaceAll(r"\", "") : "imagination of the poets....",
                       style: TextStyle( 
                         fontFamily: 'Andika',
                         fontSize: 15.0,
