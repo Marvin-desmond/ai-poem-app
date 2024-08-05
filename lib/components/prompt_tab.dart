@@ -46,16 +46,29 @@ class _PromptTabState extends State<PromptTab> {
                   bottom: 5,
                   left: 20,
                   child: FilledButton.icon(
-                    icon: const Image(
-                    height: 40,
-                    image: AssetImage("assets/images/gen_ai.png"),
-                    ),
+                    icon: const Icon(Icons.gesture_rounded),
                     label: const Text(
                     'Generate',
                     style: TextStyle(fontWeight: FontWeight.w700),
                     ),
-                onPressed: () {
-                  
+                onPressed: () async {
+                  if (value.createdUpdatedPoem != null) {
+                    PicData picData = 
+                    await Api().createPic(
+                      value.createdUpdatedPoem!.id, value.createdUpdatedPoem!.imaginePrompt[0]
+                      );
+                    if (picData.streamDone) {
+                      if (picData.fileId != null){
+                       PicData picResult = await Api().getPic(picData.fileId!); 
+                       if (picResult.buffer != null) {
+                        setState(() {
+                          buffer = base64Decode(picResult.buffer!);
+                          Provider.of<PoemNotifier>(context, listen: false).setBuffer(buffer!);
+                        });
+                       }
+                      }
+                    }
+                  } 
                 },
                 iconAlignment: IconAlignment.start,
                 style: ButtonStyle(
@@ -81,6 +94,16 @@ class _PromptTabState extends State<PromptTab> {
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 ),
                 margin: const EdgeInsets.only(left:15.0, top:5.0, right:15.0, bottom: 15),
+                child: buffer != null ? 
+                Container(
+                  decoration: BoxDecoration(
+                    image:DecorationImage( 
+                      image: MemoryImage(buffer!),
+                      fit: BoxFit.cover
+                    )
+                    ) 
+                  )  
+                : Container(),
               ),
             )
           ],
