@@ -82,8 +82,18 @@ class PoemNotifier extends ChangeNotifier {
     return userMap;
   }
 
+  void addCreatedUpdatedPoem() {
+    List<Poem> poemsToAdd = [createdUpdatedPoem!]; 
+    populate(poemsToAdd);
+  }
+
   void setCreatedUpdatedPoem(Poem poem) {
     createdUpdatedPoem = poem; 
+    notifyListeners();
+  }
+
+  void setBuffer(Uint8List buffer) {
+    createdUpdatedPoem!.buffer = buffer; 
     notifyListeners();
   }
 
