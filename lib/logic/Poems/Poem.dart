@@ -1,6 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
+import 'package:ai_poem_app/common.dart';
 
 class Metadata {
     final String id;
@@ -17,20 +15,23 @@ class Metadata {
         fileId = json['file_id'];
 }
 
-class MetaStream {
+class PicData {
     final bool streamDone;
     final bool metaDone;
-    final String buffer;
+    final String? fileId;
+    final String? buffer;
   
-    const MetaStream({
+    const PicData({
     required this.streamDone,
     required this.metaDone,
+    required this.fileId,
     required this.buffer,
   });
-    MetaStream.fromJson(Map<String, dynamic> json)
+    PicData.fromJson(Map<String, dynamic> json)
       : streamDone = json['stream_done'],
         metaDone = json['meta_done'],
-        buffer = json['buffer'];
+        fileId = json['file_id'] ?? null,
+        buffer = json['buffer'] ?? null;
 }
 
 class Poem {
@@ -69,34 +70,34 @@ class BaseResponse<T> {
 }
 // END TO-DO
 
-class PicResponse {
+class PicDataResponse {
   final int status;
-  final MetaStream data;
+  final PicData data;
   final String message;
 
-  const PicResponse({
+  const PicDataResponse({
     required this.status,
     required this.data,
     required this.message,
   });
 
-  PicResponse.fromJson(Map<String, dynamic> json)
+  PicDataResponse.fromJson(Map<String, dynamic> json)
       : status = json['status'],
-        data = MetaStream.fromJson(json['data']),
+        data = PicData.fromJson(json['data']),
         message = json['message'];
 }
 
-class MetaResponse {
+class MetadataResponse {
   final int status;
   final List<Metadata> data;
   final String message;
 
-  const MetaResponse({
+  const MetadataResponse({
     required this.status,
     required this.data,
     required this.message,
   });
-  MetaResponse.fromJson(Map<String, dynamic> json)
+  MetadataResponse.fromJson(Map<String, dynamic> json)
       : status = json['status'],
         data =
             (json['data'] as List).map((item) => Metadata.fromJson(item)).toList(),
@@ -181,36 +182,6 @@ class UpdateResponse {
   UpdateResponse.fromJson(Map<String, dynamic> json)
       : status = json['status'],
         data = json['data'] != null ? UpdateData.fromJson(json['data']) : null,
-        message = json['message'];
-}
-
-class CreatePicData {
-  final bool streamDone;
-  final bool metaDone;
-  final String fileId;
-  final String buffer;
-  const CreatePicData({
-    required this.streamDone,
-    required this.metaDone,
-    required this.fileId,
-    required this.buffer
-  });
-
-  CreatePicData.fromJson(Map<String, dynamic> json)
-      : streamDone = json['stream_done'],
-        metaDone = json['meta_done'],
-        fileId = json['file_id'],
-        buffer = json['buffer'];
-}
-
-class CreatePicDataResponse {
-  final int status;
-  final CreatePicData data;
-  final String message;
-
-  CreatePicDataResponse.fromJson(Map<String, dynamic> json)
-      : status = json['status'],
-        data = CreatePicData.fromJson(json['data']),
         message = json['message'];
 }
 
