@@ -70,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _handleOpenMenuPressed() async {
     setState(() => _isMenuOpen = true);
-    ImageModel? pickedImage =
-        await appLogic.showFullscreenDialogRoute<ImageModel>(
+    Poem? pickedPoem =
+        await appLogic.showFullscreenDialogRoute<Poem>(
       context,
-      GridPoem(index: _poemIndex, data: currentModel),
+      GridPoem(index: _poemIndex, data: currentPoem),
     );
     setState(() => _isMenuOpen = false);
-    if (pickedImage != null) {
-      _setPageIndex(models.indexWhere((x) => x == pickedImage));
+    if (pickedPoem != null) {
+      _setPageIndex(poems.indexWhere((x) => x == pickedPoem));
     }
   }
 
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen>
   void _setPageIndex(int index) {
     if (index == _poemIndex) return;
     final pos =
-        ((controller.page ?? 0) / models.length).floor() * models.length;
+        ((controller.page ?? 0) / poems.length).floor() * poems.length;
     controller.jumpToPage(pos + index);
   }
 
