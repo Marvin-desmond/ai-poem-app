@@ -3,7 +3,7 @@ import 'package:ai_poem_app/helpers/app_backdrop.dart';
 
 class GridPoem extends StatefulWidget {
   const GridPoem({super.key, required this.index, required this.data});
-  final ImageModel data;
+  final Poem data;
   final int index;
 
   @override
@@ -11,17 +11,17 @@ class GridPoem extends StatefulWidget {
 }
 
 class _GridPoemState extends State<GridPoem> {
-  var models = [];
+  String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
+  var poems = [];
 
-  void _handlePoemPressed(BuildContext context, ImageModel data) =>
+  void _handlePoemPressed(BuildContext context, Poem data) =>
       Navigator.pop(context, data);
-
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ImageModelClass>(
-        builder: (context, imageModelClass, child) {
-      models = imageModelClass.images;
+    return Consumer<PoemNotifier>(
+        builder: (context, poemNotifier, child) {
+      poems = poemNotifier.poems;
       return Stack(
         children: [
           AppBackdrop(
@@ -45,7 +45,7 @@ class _GridPoemState extends State<GridPoem> {
                       child: TextButton(
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent)),
+                                WidgetStateProperty.all(Colors.transparent)),
                         child: const Icon(
                           Icons.close,
                           color: Colors.white,
@@ -100,7 +100,7 @@ class _GridPoemState extends State<GridPoem> {
             children: [
               Flexible(
                 child: GridView.builder(
-                  itemCount: models.length,
+                  itemCount: poems.length,
                   physics: const ScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -110,7 +110,7 @@ class _GridPoemState extends State<GridPoem> {
                   ),
                   itemBuilder: (context, index) => Container(
                     child: _buildGridBtn(
-                        context, index, widgetIndex, models[index]),
+                        context, index, widgetIndex, poems[index]),
                   ),
                 ),
               ),
@@ -122,11 +122,11 @@ class _GridPoemState extends State<GridPoem> {
   }
 
   Widget _buildGridBtn(
-      BuildContext context, int index, int widgetIndex, ImageModel model) {
+      BuildContext context, int index, int widgetIndex, Poem currentPoem) {
     bool isSelected = index == widgetIndex;
     return GestureDetector(
       onTap: () {
-        _handlePoemPressed(context, model);
+        _handlePoemPressed(context, currentPoem);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -138,7 +138,20 @@ class _GridPoemState extends State<GridPoem> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: SizedBox.expand(
-              child: Image.network(model.image, fit: BoxFit.cover)),
+              child: Container(
+                          decoration: BoxDecoration(
+                          image: currentPoem.buffer == null ? 
+                          DecorationImage(
+                            image: NetworkImage(defaultImage),
+                            fit: BoxFit.cover
+                          ) : 
+                          DecorationImage(
+                            image: MemoryImage(currentPoem.buffer!),
+                            fit: BoxFit.cover
+                          ) 
+                        ),
+              )
+              ),
         ),
       ),
     );
