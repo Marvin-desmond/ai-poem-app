@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ai_poem_app/screens/first_screen.dart';
 import 'package:ai_poem_app/screens/second_screen.dart';
 import 'package:ai_poem_app/screens/new_poem_screen.dart';
+import 'package:ai_poem_app/screens/edit_poems_screen.dart';
 
 /// Shared paths / urls used across the app
 class ScreenPaths {
@@ -12,6 +13,7 @@ class ScreenPaths {
   static String home = '/home';
   static String imageDetails(String id) => '/details/$id';
   static String newPoem = "/newPoem";
+  static String editPoems = "/editPoems";
   static String infiniteScroll = "/infiniteScroll";
 }
 
@@ -27,7 +29,7 @@ final appRouter = GoRouter(
       return SecondScreen(id: id);
     }, useFade: true),
     AppRoute(ScreenPaths.newPoem, (s) => const NewPoem()),
-    // AppRoute(ScreenPaths.infiniteScroll, (s) => const nfiniteScroll()),
+    AppRoute(ScreenPaths.editPoems, (s) => const EditPoems())
   ],
 );
 
