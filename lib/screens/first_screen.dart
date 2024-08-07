@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: IconButton(
               icon: const Icon(Icons.edit),
               color: Colors.white,
-              onPressed: () => context.push(ScreenPaths.newPoem),
+              onPressed: () => context.push(ScreenPaths.editPoems),
             ),
           ),
         ))
