@@ -12,14 +12,13 @@ class ScreenPaths {
   static String splash = '/';
   static String home = '/home';
   static String imageDetails(String id) => '/details/$id';
-  static String newPoem = "/newPoem";
-  static String editPoems = "/editPoems";
+  static String newPoem(String id) => "/newPoem/$id";
+  static String editPoems = '/editPoems';
   static String infiniteScroll = "/infiniteScroll";
 }
 
 /// Routing table, matches string paths to UI Screens
 final appRouter = GoRouter(
-  // navigatorBuilder: (_, __, child) => WondersAppScaffold(child: child),
   routes: [
     AppRoute(ScreenPaths.splash,
         (_) => Container(color: Colors.grey)), // This will be hidden
@@ -28,8 +27,11 @@ final appRouter = GoRouter(
       String id = s.pathParameters['id'] ?? '';
       return SecondScreen(id: id);
     }, useFade: true),
-    AppRoute(ScreenPaths.newPoem, (s) => const NewPoem()),
-    AppRoute(ScreenPaths.editPoems, (s) => const EditPoems())
+    AppRoute(ScreenPaths.editPoems, (s) => const EditPoems()),
+    AppRoute('/newPoem/:id', (s) {
+      String id = s.pathParameters['id'] ?? '';
+      return NewPoem(id: id);
+    }, useFade: true),
   ],
 );
 
