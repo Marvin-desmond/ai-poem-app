@@ -29,7 +29,6 @@ class _MainPageState extends State<MainPage> {
     ..addListener(_handleScrollChanged);
   final _scrollPos = ValueNotifier(0.0);
   final _scrollToPopThreshold = 50;
-  String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
 
   bool _isPointerDown = false;
   bool _checkPointerIsDown(d) => _isPointerDown = d.dragDetails != null;
@@ -111,8 +110,8 @@ class _MainPageState extends State<MainPage> {
                         Container(
                           decoration: BoxDecoration(
                           image: currentPoem.buffer == null ? 
-                          DecorationImage(
-                            image: NetworkImage(defaultImage),
+                          const DecorationImage(
+                            image: AssetImage("assets/images/default.png"),
                             fit: BoxFit.cover
                           ) : 
                           DecorationImage(
