@@ -11,7 +11,6 @@ class GridPoem extends StatefulWidget {
 }
 
 class _GridPoemState extends State<GridPoem> {
-  String defaultImage = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2071&q=80";
   var poems = [];
 
   void _handlePoemPressed(BuildContext context, Poem data) =>
@@ -141,8 +140,8 @@ class _GridPoemState extends State<GridPoem> {
               child: Container(
                           decoration: BoxDecoration(
                           image: currentPoem.buffer == null ? 
-                          DecorationImage(
-                            image: NetworkImage(defaultImage),
+                          const DecorationImage(
+                            image: AssetImage("assets/images/default.png"),
                             fit: BoxFit.cover
                           ) : 
                           DecorationImage(
