@@ -12,7 +12,8 @@ class ScreenPaths {
   static String splash = '/';
   static String home = '/home';
   static String imageDetails(String id) => '/details/$id';
-  static String newPoem(String id) => "/newPoem/$id";
+  static String createPoem = "/createPoem";
+  static String updatePoem(String id) => "/updatePoem/$id";
   static String editPoems = '/editPoems';
   static String infiniteScroll = "/infiniteScroll";
 }
@@ -28,7 +29,8 @@ final appRouter = GoRouter(
       return SecondScreen(id: id);
     }, useFade: true),
     AppRoute(ScreenPaths.editPoems, (s) => const EditPoems()),
-    AppRoute('/newPoem/:id', (s) {
+    AppRoute(ScreenPaths.createPoem, (s) => const NewPoem(id: null)),
+    AppRoute('/updatePoem/:id', (s) {
       String id = s.pathParameters['id'] ?? '';
       return NewPoem(id: id);
     }, useFade: true),
