@@ -1,9 +1,19 @@
 import 'package:ai_poem_app/common.dart';
 
 class NewPoemTab extends StatefulWidget {
-  const NewPoemTab({super.key, required this.bottomContextHeight, required this.textEditController});
+  const NewPoemTab({
+    super.key, 
+    required this.bottomContextHeight, 
+    required this.textEditController,
+    required  this.setAcknowledged,
+    required this.acknowledged,
+    required this.id
+    });
   final double bottomContextHeight;
   final TextEditingController textEditController;
+  final String? id;
+  final bool acknowledged;
+  final Function setAcknowledged;
 
   @override
   State<NewPoemTab> createState() => _NewPoemTabState();
@@ -31,9 +41,14 @@ class _NewPoemTabState extends State<NewPoemTab> {
                     if (widget.bottomContextHeight > 0.0) {
                       FocusManager.instance.primaryFocus?.unfocus();
                     } else {
-                    if (Provider.of<PoemNotifier>(context, listen: false).createdUpdatedPoem != null) {
-                      Provider.of<PoemNotifier>(context, listen: false).addCreatedUpdatedPoem();
-                    }
+                        if (widget.acknowledged) {
+                          if (widget.id != null) {
+                            Provider.of<PoemNotifier>(context, listen: false).addUpdatedPoem(widget.id!);
+                          }
+                          else {
+                            Provider.of<PoemNotifier>(context, listen: false).addCreatedPoem();
+                          }
+                        }
                     context.pop();
                     }
                   }, icon: const Icon(Icons.close)
@@ -66,13 +81,13 @@ class _NewPoemTabState extends State<NewPoemTab> {
                       }
                       if (response.acknowledged) {
                           setState(() {
+                           widget.setAcknowledged();
                            FocusScope.of(context).unfocus();
                            Provider.of<PoemNotifier>(context, listen: false).setCreatedUpdatedPoem(returnedPoem!);
                            DefaultTabController.of(context).animateTo(1);
                           });
                       }
                       } catch(e) {
-                        print("ERROR IN CREATE POEM");
                         print(e);
                       }
                     }, 
