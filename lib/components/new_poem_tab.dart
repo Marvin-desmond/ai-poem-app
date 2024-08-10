@@ -59,6 +59,10 @@ class _NewPoemTabState extends State<NewPoemTab> {
                               try {
                                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
                                 if (image == null) return;
+                                String? extractedPoem = await Api().getPoemFromImage(File(image.path));
+                                if (extractedPoem.isNotEmpty) {
+                                  widget.textEditController.text = extractedPoem;
+                                }
                                 setState(() {
                                   _image = File(image.path);
                                 });
