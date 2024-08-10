@@ -15,8 +15,6 @@ export 'package:go_router/go_router.dart';
 export 'package:flextras/flextras.dart';
 export 'package:image_picker/image_picker.dart';
 
-export 'package:ai_poem_app/image_logic/image_model.dart';
-export 'package:ai_poem_app/image_logic/image_model_class.dart';
 export 'package:ai_poem_app/main.dart';
 export 'package:ai_poem_app/router.dart';
 export 'package:ai_poem_app/logic/Poems/api.dart';
