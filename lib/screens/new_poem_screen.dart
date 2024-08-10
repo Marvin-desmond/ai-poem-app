@@ -3,7 +3,8 @@ import 'package:ai_poem_app/components/new_poem_tab.dart';
 import 'package:ai_poem_app/components/prompt_tab.dart';
 
 class NewPoem extends StatefulWidget {
-  const NewPoem({super.key});
+  const NewPoem({super.key, required this.id});
+  final String? id;
 
   @override
   State<NewPoem> createState() => _NewPoemState();
@@ -11,11 +12,34 @@ class NewPoem extends StatefulWidget {
 
 class _NewPoemState extends State<NewPoem> {
   final _controller = TextEditingController();
+  late PoemNotifier poemNotifierInDispose;
+  bool acknowledged = false;
 
   @override
   void initState() {
     super.initState();
-    Provider.of<PoemNotifier>(context, listen: false).clearCreatedUpdatedPoem();
+    Poem? fetchedPoem = Provider.of<PoemNotifier>(context, listen: false).createdUpdatedPoem;
+    if (fetchedPoem != null) {
+      _controller.text = fetchedPoem.poem;
+    }
+  }
+
+  void setAcknowledged() {
+    setState(() {
+      acknowledged = true;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    poemNotifierInDispose = Provider.of<PoemNotifier>(context, listen: false);
+  }
+
+  @override 
+  void dispose() {
+    poemNotifierInDispose.clearCreatedUpdatedPoem();
+    super.dispose();
   }
 
   String? editedPoemTextFromChild;
@@ -28,8 +52,13 @@ class _NewPoemState extends State<NewPoem> {
         child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 10.0,
-            bottom: const TabBar(
-            tabs: [
+            bottom: TabBar(
+            onTap: (index) {
+              if (MediaQuery.of(context).viewInsets.bottom > 0.0) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+              }
+            },
+            tabs: const[
                   Tab(text: "Poem"),
                   Tab(text: "Prompt")
                 ]
@@ -41,6 +70,9 @@ class _NewPoemState extends State<NewPoem> {
           NewPoemTab(
             bottomContextHeight: MediaQuery.of(context).viewInsets.bottom,
             textEditController: _controller,
+            setAcknowledged: setAcknowledged,
+            acknowledged: acknowledged,
+            id: widget.id
           ),
           const Center(
             child: PromptTab()
