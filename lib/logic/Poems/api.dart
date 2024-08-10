@@ -52,7 +52,7 @@ class Api {
     }
   }
 
-    Future<PicData> createPic(String poemId, String prompt) async {
+  Future<PicData> createPic(String poemId, String prompt) async {
     final response =
         await http.post(
           Uri.parse("$basePicUrl/create"),
@@ -72,7 +72,8 @@ class Api {
       throw Exception(res.message);
     }
   }
-    Future<UpdateData> updatePoem(String id, String newPoem) async {
+
+  Future<UpdateData> updatePoem(String id, String newPoem) async {
     final response =
         await http.put(
           Uri.parse("$basePoemUrl/update"),
@@ -93,10 +94,23 @@ class Api {
     }
   }
 
-    Future<Poem> getPoem(String poemId) async {
+  Future<Poem> getPoem(String poemId) async {
     final response =
         await http.get(Uri.parse("$basePoemUrl/get/$poemId"));
     SinglePoemResponse res = SinglePoemResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    if (res.status == 200) {
+      return res.data;
+    } else {
+      throw Exception(res.message);
+    }
+  }
+
+  Future<DeleteData> deletePoem(String poemId) async {
+    final response =
+        await http.delete(Uri.parse("$basePoemUrl/delete/$poemId"));
+
+    DeleteDataResponse res = DeleteDataResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
     if (res.status == 200) {
       return res.data;
