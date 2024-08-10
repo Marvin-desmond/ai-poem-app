@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen>
   double? _swipeOverride;
   bool _fadeInOnNextBuild = false;
   bool initialLoad = false;
-  List<ImageModel> models = [];
   List<Poem> poems = [];
   Poem currentPoem = Poem(
       "123456789",
