@@ -75,16 +75,15 @@ class PoemNotifier extends ChangeNotifier {
     }
   }
 
-  Future<Iterable> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/files/image_models.json');
-    Iterable userMap = await jsonDecode(response);
-    return userMap;
-  }
-
-  void addCreatedUpdatedPoem() {
+  void addCreatedPoem() {
     List<Poem> poemsToAdd = [createdUpdatedPoem!]; 
     populate(poemsToAdd);
+  }
+
+  void addUpdatedPoem(String id) {
+    int i = poems.indexWhere((x) => x.id == id);
+    poems[i] = createdUpdatedPoem!; 
+    notifyListeners();
   }
 
   void setCreatedUpdatedPoem(Poem poem) {
@@ -92,6 +91,11 @@ class PoemNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deletePoem(String id) {
+    poems.removeWhere((x) => x.id == id);
+    notifyListeners();
+  }
+  
   void setBuffer(Uint8List buffer) {
     createdUpdatedPoem!.buffer = buffer; 
     notifyListeners();
