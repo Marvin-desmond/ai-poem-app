@@ -85,11 +85,18 @@ class _MainPageState extends State<MainPage> {
               controller: _scroller,
               slivers: <Widget>[
                 SliverAppBar(
-                  leading: IconButton(
-                      icon: const Icon(Icons.sort),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+                  leading: Container(
+                    margin: const EdgeInsets.only(top: 15.0, left: 15.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.grey.shade700.withOpacity(0.3),
+                        border: Border.all(color: Colors.white, width: 1.0)),
+                    child: IconButton(
+                      icon: const Icon(Icons.close),
+                      color: Colors.white,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                   backgroundColor: Colors.black,
                   expandedHeight: 200,
                   floating: true,
@@ -128,13 +135,6 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
           ),
-          const Positioned(
-              top: 0,
-              right: 0,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ToggleLike(),
-              )),
         ]),
       ),
     );
@@ -152,41 +152,6 @@ class ScrollMainContent extends StatelessWidget {
         const ProfileBar(),
         PoemParent(poem: poem),
       ]),
-    );
-  }
-}
-
-class ToggleLike extends StatefulWidget {
-  const ToggleLike({super.key});
-
-  @override
-  State<ToggleLike> createState() => _ToggleLikeState();
-}
-
-class _ToggleLikeState extends State<ToggleLike> {
-  bool liked = false;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 35.0,
-      width: 35.0,
-      child: IconButton(
-        iconSize: 25.0,
-        icon: liked
-            ? const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              )
-            : const Icon(
-                Icons.favorite_border,
-                color: Colors.red,
-              ),
-        onPressed: () {
-          setState(() {
-            liked = !liked;
-          });
-        },
-      ),
     );
   }
 }

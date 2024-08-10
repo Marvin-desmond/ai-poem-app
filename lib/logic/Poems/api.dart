@@ -1,11 +1,13 @@
+import 'dart:io';
+import 'package:path/path.dart' as path;
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './Poem.dart';
-
 class Api {
-    String basePoemUrl = "http://10.0.2.2:8080/api/poems";
-    String basePicUrl = "http://10.0.2.2:8080/api/pics";
-    String imagines = "http://10.0.2.2:8080/api/imagines";
+    String basePoemUrl = "https://acceptable-comfort-production.up.railway.app/api/poems";
+    String basePicUrl = "https://acceptable-comfort-production.up.railway.app/api/pics";
+    String imagines = "https://acceptable-comfort-production.up.railway.app/api/imagines";
 
     Future<ApiResponse> getPoems() async {
     final response =
@@ -104,6 +106,20 @@ class Api {
     } else {
       throw Exception(res.message);
     }
+  }
+
+    Future<String> getPoemFromImage(File file) async {
+      String extractedPoem = "";
+      var stream = http.ByteStream(file.openRead());
+      stream.cast();
+      var length = await file.length();
+      var request = http.MultipartRequest("POST", Uri.parse("$basePoemUrl/extract"));
+      var multipartFile = http.MultipartFile('image', stream, length,
+          filename: path.basename(file.path));  
+      request.files.add(multipartFile);
+      var response = await request.send();
+      extractedPoem = await response.stream.transform(utf8.decoder).join();
+      return extractedPoem;
   }
 
   Future<DeleteData> deletePoem(String poemId) async {

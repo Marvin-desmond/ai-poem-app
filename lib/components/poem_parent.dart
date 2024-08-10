@@ -10,8 +10,7 @@ class PoemParent extends StatelessWidget {
     return SizedBox(
       child: Column(
         children: <Widget>[
-          PoemChild(poem: poem),
-          const PoemFooter(),
+          PoemChild(poem: poem)
         ],
       ),
     );
@@ -62,7 +61,7 @@ class _PoemTextState extends State<PoemText> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      widget.poemContents * 3,
+      widget.poemContents,
       style: const TextStyle(
         fontFamily: 'FuzzyBubbles',
         fontWeight: FontWeight.bold,

@@ -2,14 +2,11 @@ import 'dart:ui';
 
 import 'package:ai_poem_app/common.dart';
 
-import 'package:ai_poem_app/helpers/circle_buttons.dart';
-import 'package:ai_poem_app/helpers/app_icons.dart';
 import 'package:ai_poem_app/helpers/gradient_container.dart';
 import 'package:ai_poem_app/helpers/buttons.dart';
 
 import 'package:ai_poem_app/animations/app_page_indicator.dart';
 import 'package:ai_poem_app/screens/grid_poem_screen.dart';
-import 'package:ai_poem_app/screens/loading_screen.dart';
 
 part '../animations/_vertical_swipe_controller.dart';
 part '../animations/_animated_arrow_button.dart';
@@ -245,14 +242,20 @@ class _HomeScreenState extends State<HomeScreen>
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 500),
           opacity: _isMenuOpen ? 0.1 : 1,
-          child: MergeSemantics(
-            child: Semantics(
-              sortKey: const OrdinalSortKey(0),
-              child: CircleIconBtn(
-                icon: AppIcons.menu,
-                onPressed: _handleOpenMenuPressed,
-                semanticLabel: "homeSemanticOpenMain",
-              ).safe(),
+          child: Container(
+          margin: const EdgeInsets.only(top: 45.0, right: 28.0, left: 18.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Colors.grey.shade700.withOpacity(0.3),
+              border: Border.all(color: Colors.white, width: 1.0)),
+          child: IconButton(
+            iconSize: 10,
+            icon: Image.asset(
+              "assets/images/icon-menu.png",
+              height: 30.0,
+              ),
+            color: Colors.white,
+            onPressed: () => _handleOpenMenuPressed(),
             ),
           ),
         ),
@@ -265,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen>
           margin: const EdgeInsets.only(top: 45.0, right: 28.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
+              color: Colors.grey.shade700.withOpacity(0.3),
               border: Border.all(color: Colors.white, width: 1.0)),
           child: IconButton(
             icon: const Icon(Icons.edit),
