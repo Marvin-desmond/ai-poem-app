@@ -185,3 +185,33 @@ class UpdateResponse {
         message = json['message'];
 }
 
+
+class Response {
+  final int status;
+  final String message;
+
+  const Response(this.status, this.message);
+  Response.fromJson(Map<String, dynamic> json)
+    :  status = json['status'],
+      message = json['message'];
+}
+
+class DeleteData {
+  final bool acknowledged;
+  final int deletedCount;
+  DeleteData({
+    required this.acknowledged,
+    required this.deletedCount
+  });
+  DeleteData.fromJson(Map<String, dynamic> json)
+  : acknowledged = json['acknowledged'],
+    deletedCount = json['deletedCount'];
+}
+
+class DeleteDataResponse extends Response {
+  final DeleteData data;
+
+  DeleteDataResponse.fromJson(Map<String, dynamic> json)
+    : data = DeleteData.fromJson(json['data']),
+      super(json['status'], json['message']);
+}
