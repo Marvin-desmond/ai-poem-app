@@ -126,8 +126,27 @@ class _HomeScreenState extends State<HomeScreen>
                 image: AssetImage('assets/images/default.png'), 
                 fit: BoxFit.contain),
               ),
-              child: const Center(
-                child: CircularProgressIndicator()
+              child: Center(
+                child: 
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 30.0,),
+                    FilledButton.icon(
+                      icon: const Icon(Icons.add),
+                      label: const Text(
+                      'New',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: () => context.push(ScreenPaths.createPoem),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(const Color(0xffFF185D)),
+                      )
+                    ),
+                    const SizedBox(height: 30.0,)
+                  ],
+                )
                 )
               ),
           )
