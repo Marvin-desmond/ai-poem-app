@@ -11,8 +11,8 @@ class PoemNotifier extends ChangeNotifier {
 
   bool ifError = false;
   List<Poem> poems = [];
-  String basePoem = "http://10.0.2.2:8080/api/poems";
-  String basePics = "http://10.0.2.2:8080/api/pics";
+  String basePoem = "https://acceptable-comfort-production.up.railway.app/api/poems";
+  String basePics = "https://acceptable-comfort-production.up.railway.app/api/pics";
 
   PoemNotifier() {
     getPoems().then((res) async {
@@ -25,7 +25,6 @@ class PoemNotifier extends ChangeNotifier {
             var specificMeta = picsMeta.where((i) => i.poemId == poem.id).toList();
             if (specificMeta.isNotEmpty) {
               var thirdRes = await getPic(specificMeta[0].fileId);
-              print(specificMeta[0].fileId);
               if (thirdRes.status == 200) {
                 if (thirdRes.data.buffer != null) {
                 poem.buffer = base64Decode(thirdRes.data.buffer!); 
